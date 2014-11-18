@@ -2,13 +2,15 @@
 
 class CPMap {
 public:
-    float *compute_output(float **source, size2 source_size, int source_count);
-    float *compute_error(float** weights, float* errors);
+    float* compute_output(float** source, size2 source_size, int source_count);
+
+    float* compute_error(float** weights, float* errors);
+
     void update_weights();
 
-    CPMap(float *shared_weights, size2 const &shared_weights_size, size2 const &map_size, size2 const &pool_window_size)
-            : shared_weights(shared_weights),
-              shared_weights_size(shared_weights_size),
+    CPMap(float* weights, size2 const& weights_size, size2 const& map_size, size2 const& pool_window_size)
+            : weights(weights),
+              weights_size(weights_size),
               map_size(map_size),
               pool_window_size(pool_window_size) {
         pool_size = {map_size.x / pool_window_size.x, map_size.y / pool_window_size.y};
@@ -20,10 +22,11 @@ public:
     }
 
 private:
-    float shared_weights[], map_input[], map_output[], computed_error[], pool_output[];
-    size2 map_size, pool_size, shared_weights_size, pool_window_size;
+    float weights[], bias, map_input[], map_output[], computed_error[], pool_output[];
+    size2 map_size, pool_size, weights_size, pool_window_size;
     int pool_input_indexes[];
 
-    void compute_map_output(float **source, size2 source_size, int source_count);
+    void compute_map_output(float** source, size2 source_size, int source_count);
+
     void compute_pool_output();
 };
